@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -17,7 +16,7 @@ import javax.swing.JLabel;
 */
 
 public class VersaoDialog extends JDialog {
-	private Image icone;
+	private final Image icone;
 
 	/**
 	* O construtor se encarrega de criar e exibir todo o diálogo

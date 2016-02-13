@@ -2,14 +2,15 @@ package com.cristian;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -33,8 +34,8 @@ import javax.swing.text.DocumentFilter;
 
 public class TerminalPotigol extends JTabbedPane {
 	private Comando cmd;
-	private Console consolePotigol;
-	private JScrollPane barra;
+	private final Console consolePotigol;
+	private final JScrollPane barra;
 
 	public TerminalPotigol() {
 		consolePotigol = new Console();
@@ -55,7 +56,7 @@ public class TerminalPotigol extends JTabbedPane {
 	class Console extends JTextArea implements ComandoListener, Terminal {
 		private int entradaUsuario;
 
-		public Console() {
+		Console() {
 			cmd = new Comando(this);
 			this.setBorder(null);
 
@@ -64,7 +65,7 @@ public class TerminalPotigol extends JTabbedPane {
 				Font fonte = Font.createFont(Font.TRUETYPE_FONT, is);
 				fonte = fonte.deriveFont(13.0F);
 				this.setFont(fonte);
-			} catch (Exception ex) {  }
+			} catch (FontFormatException | IOException ex) {  }
 
 			this.setForeground(Color.WHITE);
 			this.setCaretColor(Color.WHITE);
@@ -168,10 +169,10 @@ public class TerminalPotigol extends JTabbedPane {
 	}
 
 	class Comando {
-		private ComandoListener cmdListener;
+		private final ComandoListener cmdListener;
 		private Processo p;
 
-		public Comando(ComandoListener cl) {
+		Comando(ComandoListener cl) {
 			this.cmdListener = cl;
 		}
 
@@ -197,11 +198,11 @@ public class TerminalPotigol extends JTabbedPane {
 	}
 
 	class Processo extends Thread {
-		private List<String> comandos;
-		private ComandoListener cmdListener;
+		private final List<String> comandos;
+		private final ComandoListener cmdListener;
 		private Process p;
 
-		public Processo(ComandoListener cl, List<String> cmds) {
+		Processo(ComandoListener cl, List<String> cmds) {
 			this.comandos = cmds;
 			this.cmdListener = cl;
 			this.start();
@@ -224,7 +225,7 @@ public class TerminalPotigol extends JTabbedPane {
 				});
 
 				cmdListener.comandoConcluido(sj.toString(), r);
-			} catch (Exception ex) {
+			} catch (IOException | InterruptedException ex) {
 				cmdListener.falhaAoExecutar(ex);
 			}
 		}
@@ -238,10 +239,10 @@ public class TerminalPotigol extends JTabbedPane {
 	}
 
 	class FluxoLeitor extends Thread {
-		private InputStream is;
-		private ComandoListener cmdListener;
+		private final InputStream is;
+		private final ComandoListener cmdListener;
 
-		public FluxoLeitor(ComandoListener l, InputStream i) {
+		FluxoLeitor(ComandoListener l, InputStream i) {
 			this.is = i;
 			this.cmdListener = l;
 			start();
@@ -250,16 +251,16 @@ public class TerminalPotigol extends JTabbedPane {
 		@Override
 		public void run() {
 			try {
-				int valor = -1;
+				int valor;
 				while ((valor = is.read()) != -1) {
 					cmdListener.saidaComando(Character.toString((char) valor));
 				}
-			} catch (Exception ex) {  }
+			} catch (IOException ex) {  }
 		}
 	}
 
 	public class DFilter extends DocumentFilter {
-		private EntradaUsuario eUsuario;
+		private final EntradaUsuario eUsuario;
 
 		public DFilter(EntradaUsuario eu) {
 			this.eUsuario = eu;

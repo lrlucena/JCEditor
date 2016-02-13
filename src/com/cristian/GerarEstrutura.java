@@ -10,8 +10,8 @@ import javax.swing.JTextArea;
 */
 
 public class GerarEstrutura {
-	private JTextArea area;
-	private String linguagem;
+	private final JTextArea area;
+	private final String linguagem;
 	private String t;
 
 	/**
@@ -29,15 +29,22 @@ public class GerarEstrutura {
 	* Método que verifica a linguagem e gera a estrutura correspondente.
 	*/
 	private void gerar() {
-		if (linguagem.equals("Java")) {
-			t = "public class Nome {\n\tpublic static void main (String[] args) {\n\t\t\n\t}\n}";
-		} else if (linguagem.equals("Scala")) {
-			t = "object Nome extends Application {\n\n}";
-		} else if (linguagem.equals("Portugol")) {
-			t = "algoritmo : \"Nome\"\n\nvar\n\ninicio\n\nfimalgoritmo";
-		} else if (linguagem.equals("PHP")) {
-			t = "<?php\n\n?>";
-		}
+            switch (linguagem) {
+                case "Java":
+                    t = "public class Nome {\n\tpublic static void main (String[] args) {\n\t\t\n\t}\n}";
+                    break;
+                case "Scala":
+                    t = "object Nome extends Application {\n\n}";
+                    break;
+                case "Portugol":
+                    t = "algoritmo : \"Nome\"\n\nvar\n\ninicio\n\nfimalgoritmo";
+                    break;
+                case "PHP":
+                    t = "<?php\n\n?>";
+                    break;
+                default:
+                    break;
+            }
 
 		area.setText(t);
 	}

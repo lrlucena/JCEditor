@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Locale;
-
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -30,6 +29,7 @@ public class PropriedadesSistema extends JDialog {
 	* O método getProperty(), da classe System foi utilizado para obter as informações do sistema
 	*/
 	public PropriedadesSistema() {
+            super();
 		setTitle("Sobre este Computador");
 		
 		tabela = new JTable();

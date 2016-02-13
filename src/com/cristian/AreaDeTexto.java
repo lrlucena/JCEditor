@@ -14,12 +14,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.java.JavaLanguageSupport;
@@ -50,7 +47,7 @@ public class AreaDeTexto extends JPanel {
 	private String linguagem = "Texto simples";
 	private String texto;
 	private boolean potigol;
-	private Pesquisar bPesquisa;
+	private final Pesquisar bPesquisa;
 
 	/**
 	* O construtor da classe define uma lista do tipo HashMap, esta lista
@@ -58,6 +55,9 @@ public class AreaDeTexto extends JPanel {
 	* de autocompletar o código.
 	*/
 	public AreaDeTexto() {
+            super(new BorderLayout());
+		this.setBorder(null);
+		this.add(barraDeRolagem());
 
 		extensao.put("java", SyntaxConstants.SYNTAX_STYLE_JAVA);
 		extensao.put("cpp", SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
@@ -92,9 +92,7 @@ public class AreaDeTexto extends JPanel {
 		extensao.put("alg", "text/portugol");
 		extensao.put("poti", "text/potigol");
 
-		this.setLayout(new BorderLayout());
-		this.setBorder(null);
-		this.add(barraDeRolagem());
+
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
 		LanguageSupport support = lsf.getSupportFor(SyntaxConstants.SYNTAX_STYLE_JAVA);
@@ -155,16 +153,15 @@ public class AreaDeTexto extends JPanel {
 	public void ler(File a) {
 		setArquivo(a);
 
-		StringBuffer st = new StringBuffer();
+		StringBuilder st = new StringBuilder();
 
-		try {
-			BufferedReader leitor = new BufferedReader(new InputStreamReader(new FileInputStream(a), "UTF-8"));
+		try (BufferedReader leitor = new BufferedReader(new InputStreamReader(new FileInputStream(a), "UTF-8"))) {
 
-			String linha = null;
-			while ((linha = leitor.readLine()) != null) {
+			String linha = leitor.readLine();
+			while (linha != null) {
 				st.append(linha).append("\n");
+                                linha = leitor.readLine();
 			}
-			leitor.close();
 		} catch (IOException ex) {
 			JOptionPane.showMessageDialog(this, "Erro ao ler o arquivo!");
 		}
@@ -180,11 +177,9 @@ public class AreaDeTexto extends JPanel {
 	*/
 	public void salvar(String texto) {
 		this.texto = texto;
-		try {
-			OutputStreamWriter escritor = new OutputStreamWriter(new FileOutputStream(arquivo), "UTF-8");
+		try (OutputStreamWriter escritor = new OutputStreamWriter(new FileOutputStream(arquivo), "UTF-8")) {
 			escritor.write(texto);
 			escritor.flush();
-			escritor.close();
 		} catch (IOException ex) {
 			JOptionPane.showMessageDialog(this, "Não foi possível salvar o arquivo!");
 		}
@@ -297,8 +292,7 @@ public class AreaDeTexto extends JPanel {
 		linguagens.put("bat", "Windows Batch");
 		linguagens.put("alg", "Portugol");
 		linguagens.put("poti", "Potigol");
-		Set<String> chaves = linguagens.keySet();
-		for (String chave : chaves) {
+		for (String chave : linguagens.keySet()) {
 			if (chave.equalsIgnoreCase(linguagem)) {
 				linguagem = linguagens.get(chave);
 			}

@@ -13,7 +13,7 @@ import javax.swing.JProgressBar;
 
 public class BarraDeMemoria extends JProgressBar {
 	private Thread t;
-	private LeitorDeMemoria leitor = new LeitorDeMemoria();
+	private final LeitorDeMemoria leitor = new LeitorDeMemoria();
 	final int MEMORIA_MAXIMA = (int) ((double) Runtime.getRuntime().maxMemory() / 1048576);
 
 	/**
@@ -22,6 +22,7 @@ public class BarraDeMemoria extends JProgressBar {
 	* String nula para a barra e chama o método que inicia o Thread.
 	*/
 	public BarraDeMemoria() {
+            super();
 		setMaximum(100);
 		setStringPainted(true);
 		setString("");
@@ -57,7 +58,7 @@ public class BarraDeMemoria extends JProgressBar {
 
 					Thread.sleep(1000);		// espera 1 seg para fazer a nova atualização
 				}
-			} catch (Exception ex) {  }
+			} catch (InterruptedException ex) {  }
 		}
 
 		/* Define o valor da barra de progresso, seu texto e ToolTip */

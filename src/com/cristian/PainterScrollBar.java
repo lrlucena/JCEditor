@@ -2,7 +2,6 @@ package com.cristian;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-
 import javax.swing.JComponent;
 import javax.swing.Painter;
 

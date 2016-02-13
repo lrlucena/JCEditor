@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import javax.swing.FocusManager;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,12 +24,12 @@ import javax.swing.JToolBar;
 
 public class Pesquisar extends JToolBar {
 	private JTextField fieldPesquisar, fieldSubstituir;
-	private JButton[] botoes = new JButton[6];
-	private ActionListener[] eventos = {new PesquisarListener(), new SubstituirListener(),
+	private final JButton[] botoes = new JButton[6];
+	private final ActionListener[] eventos = {new PesquisarListener(), new SubstituirListener(),
 		new SubstituirTodosListener(), new VoltarListener(), new ProximoListener(), new OcultarListener()};
-	private String[] imagens = {"pesquisar25", "substituir25", "substituirTodos25", "anterior25", "proximo25", "sair25"};
-	private String[] toolTip = {"Pesquisar", "Substituir", "Substituir todos", "Anterior", "Próximo", "Ocultar"};
-	private JTextArea areaDeTexto;
+	private final String[] imagens = {"pesquisar25", "substituir25", "substituirTodos25", "anterior25", "proximo25", "sair25"};
+	private final String[] toolTip = {"Pesquisar", "Substituir", "Substituir todos", "Anterior", "Próximo", "Ocultar"};
+	private final JTextArea areaDeTexto;
 	private int posicaoInicial = 0;
 
 	/**
@@ -94,7 +93,7 @@ public class Pesquisar extends JToolBar {
 	* a próxima String com o texto digitado em "fieldPesquisar" será selecionada.
 	*/
 	private void pesquisar() {
-		if (fieldPesquisar.getText().equals("")) {
+		if (fieldPesquisar.getText().isEmpty()) {
 			return;
 		}
 
@@ -161,7 +160,7 @@ public class Pesquisar extends JToolBar {
 	class SubstituirListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent ev) {
-			if (fieldSubstituir.getText().equals("")) {
+			if (fieldSubstituir.getText().isEmpty()) {
 				return;
 			}
 
@@ -176,7 +175,7 @@ public class Pesquisar extends JToolBar {
 	class SubstituirTodosListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent ev) {
-			if (fieldSubstituir.getText().equals("")) {
+			if (fieldSubstituir.getText().isEmpty()) {
 				return;
 			}
 
@@ -193,7 +192,7 @@ public class Pesquisar extends JToolBar {
 		@Override
 		public void actionPerformed(ActionEvent ev) {
 			pesquisar();
-			if (fieldSubstituir.getText().equals("") || fieldPesquisar.getText().equals("")) {
+			if (fieldSubstituir.getText().isEmpty() || fieldPesquisar.getText().isEmpty()) {
 				return;
 			}
 

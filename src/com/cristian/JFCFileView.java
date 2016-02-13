@@ -1,7 +1,6 @@
 package com.cristian;
 
 import java.io.File;
-
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileView;

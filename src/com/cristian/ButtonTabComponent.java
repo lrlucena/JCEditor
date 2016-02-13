@@ -98,7 +98,7 @@ public class ButtonTabComponent extends JPanel {
     }
 
     private class TabButton extends JButton implements ActionListener {
-        public TabButton() {
+        private TabButton() {
             int size = 17;
             setPreferredSize(new Dimension(size, size));
             setToolTipText("Fechar aba");

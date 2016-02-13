@@ -1,20 +1,22 @@
 package com.cristian;
 
 import java.awt.Color;
+import java.awt.HeadlessException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
 * Classe responsável por abrir o programa com as devidas configurações
@@ -25,7 +27,7 @@ import javax.swing.UIManager;
 
 public class Preferencias {
 	private final String HOME = System.getProperty("user.home") + "/ConfigJCE/configJCE.conf";
-	private File arquivoConfig = new File(System.getProperty("user.home") + "/ConfigJCE");
+	private final File arquivoConfig = new File(System.getProperty("user.home") + "/ConfigJCE");
 	private JCEditor editor;
 
 	/**
@@ -36,11 +38,9 @@ public class Preferencias {
 		if (arquivoConfig.exists()) {
 			abrirPreferencias();
 		} else {
-			try {
-				arquivoConfig.mkdir();
-				salvarPreferencias("jce", "jce", "Monospaced", 12, "dobrarCodigo", "quebrarLinha");
-				abrirPreferencias();
-			} catch (Exception ex) { ex.printStackTrace(); }
+                    arquivoConfig.mkdir();
+                    salvarPreferencias("jce", "jce", "Monospaced", 12, "dobrarCodigo", "quebrarLinha");
+                    abrirPreferencias();
 		}
 
 		File pastaPotigol = new File(System.getProperty("user.home") + "/ConfigJCE/.potigol");
@@ -66,15 +66,15 @@ public class Preferencias {
 	public void abrirArquivos() {
 		try {
 			FileReader fr = new FileReader(new File(System.getProperty("user.home") + "/ConfigJCE/arquivos.list"));
-			BufferedReader leitor = new BufferedReader(fr);
-			String linha = null;
-
-			while ((linha = leitor.readLine()) != null) {
-				File f = new File(linha);
-				editor.adicionarAba(f);
-			}
-			leitor.close();
-		} catch (Exception ex) { ex.printStackTrace(); }
+                    try (BufferedReader leitor = new BufferedReader(fr)) {
+                        String linha = leitor.readLine();
+                        while (linha != null) {
+                            File f = new File(linha);
+                            editor.adicionarAba(f);
+                            linha = leitor.readLine();
+                        }
+                    }
+		} catch (IOException ex) { ex.printStackTrace(); }
 	}
 
 	/**
@@ -85,11 +85,11 @@ public class Preferencias {
 		try {
 			FileReader fr = new FileReader(new File(HOME));
 			BufferedReader leitor = new BufferedReader(fr);
-			String linha = null;
+			String linha;
 
 			while ((linha = leitor.readLine()) != null) {
 				String sub = linha.substring(0, 1);
-				String conteudo = linha.substring(linha.indexOf(" ") + 1, linha.length());
+				String conteudo = linha.substring(linha.indexOf(' ') + 1, linha.length());
 
 				if (sub.equals("1")) {
 					if (conteudo.equals("jce")) {
@@ -169,7 +169,7 @@ public class Preferencias {
 			}
 			editor.carregarTema(editor.sTema);
 			editor.updateFonte();
-		} catch (Exception ex) { ex.printStackTrace(); }
+		} catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | NumberFormatException ex) { ex.printStackTrace(); }
 	}
 
 	/**
@@ -177,8 +177,7 @@ public class Preferencias {
 	* chamado toda vez que o usuário fechar o programa.
 	*/
 	public void salvarPreferencias(String laf, String tema, String fonte, int tamFonte, String dobCodigo, String qLinha) {
-		try {
-			FileWriter fw = new FileWriter(HOME);
+		try (FileWriter fw = new FileWriter(HOME)) {
 			fw.write("1 " + laf + "\n");
 			fw.write("2 " + tema + "\n");
 			fw.write("3 " + fonte + "\n");
@@ -186,22 +185,20 @@ public class Preferencias {
 			fw.write("5 " + dobCodigo + "\n");
 			fw.write("6 " + qLinha + "\n");
 			fw.flush();
-			fw.close();
-		} catch (Exception ex) {  }
+		}  catch (IOException ex) {}
+            
 	}
 
 	/**
 	* Salva o caminho dos arquivos (contidos na ArrayList), para serem abertos novamente na próxima execução.
 	*/
 	public void salvarArquivosAbertos(List<String> lista) {
-		try {
-			FileWriter fw = new FileWriter(new File(System.getProperty("user.home") + "/ConfigJCE/arquivos.list"));
+		try (FileWriter fw = new FileWriter(new File(System.getProperty("user.home") + "/ConfigJCE/arquivos.list"))) {
 			for (String l : lista) {
 				fw.write(l + "\n");
 			}
 			fw.flush();
-			fw.close();
-		} catch (Exception ex) {  }
+		} catch (IOException ex) {  }
 	}
 
 	/**
@@ -212,17 +209,15 @@ public class Preferencias {
 	* a permissão para a execução do compilador do Potigol "chmod 777 ${HOME}/ConfigJCE/.potigol/potigol.jar".
 	*/
 	private static void descompactar(File arq, File dir) {
-		ZipFile zip = null;
-		File arquivo = null;
-		InputStream is = null;
-		OutputStream os = null;
+		File arquivo;
+		//InputStream is=null;
+		//OutputStream os=null;
 		byte[] buffer = new byte[1024];
 
-		try {
-			zip = new ZipFile(arq);
-			Enumeration<?> e = zip.entries();
+		try(ZipFile zip = new ZipFile(arq)) {
+			Enumeration<? extends ZipEntry> e = zip.entries();
 			while (e.hasMoreElements()) {
-				ZipEntry entrada = (ZipEntry) e.nextElement();
+				ZipEntry entrada = e.nextElement();
 				arquivo = new File(dir, entrada.getName());
 
 				if (entrada.isDirectory() && !arquivo.exists()) {
@@ -230,40 +225,21 @@ public class Preferencias {
 					continue;
 				}
 
-				try {
-					is = zip.getInputStream(entrada);
-					os = new FileOutputStream(arquivo);
-					int bytes = 0;
-
+				try(
+					InputStream is = zip.getInputStream(entrada);
+					OutputStream os = new FileOutputStream(arquivo)){
+					int bytes;
 					while ((bytes = is.read(buffer)) > 0) {
 						os.write(buffer, 0, bytes);
 					}
-				} catch (Exception ex) {
+				} catch (IOException ex) {
 					ex.printStackTrace();
-				} finally {
-					if (is != null) {
-						try {
-							is.close();
-						} catch (Exception ex) { ex.printStackTrace(); }
-					}
-
-					if (os != null) {
-						try {
-							os.close();
-						} catch (Exception ex) { ex.printStackTrace(); }
-					}
 				}
 			}
 			JOptionPane.showMessageDialog(null, "Potigol configurado com sucesso!");
-		} catch (Exception ex) {
+		} catch (IOException | HeadlessException ex) {
 			ex.printStackTrace();
-		} finally {
-			if (zip != null) {
-				try {
-					zip.close();
-				} catch (Exception ex) { ex.printStackTrace(); }
-			}
-		}
+                }
 	}
 
 	/**
@@ -289,6 +265,6 @@ public class Preferencias {
 				"ScrollBar.decrementButtonGap", 0);
 			UIManager.getLookAndFeelDefaults().put(
 				"ScrollBar.incrementButtonGap", 0);
-		} catch (Exception ex) { ex.printStackTrace(); }
+		} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) { ex.printStackTrace(); }
 	}
 }

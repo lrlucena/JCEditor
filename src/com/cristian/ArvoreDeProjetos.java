@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTree;
@@ -39,9 +38,9 @@ public class ArvoreDeProjetos extends JPanel {
 	private File arq;
 	private JTree arvore;
 	private Map<String, String> arquivos = new HashMap<>();
-	private List<String> projetosList = new ArrayList<>();
-	private DefaultMutableTreeNode pai;
-	private File dir = new File(System.getProperty("user.home") + "/ConfigJCE/projetos.list");
+	private final List<String> projetosList = new ArrayList<>();
+	private final DefaultMutableTreeNode pai;
+	private final File dir = new File(System.getProperty("user.home") + "/ConfigJCE/projetos.list");
 	private int ret;
 	private int numArquivos;
 
@@ -185,14 +184,14 @@ public class ArvoreDeProjetos extends JPanel {
 	public void listarProjetos() {
 		try {
 			FileReader fr = new FileReader(dir);
-			BufferedReader leitor = new BufferedReader(fr);
-			String linha = null;
-
-			while ((linha = leitor.readLine()) != null) {
-				adicionarFilhos(new File(linha));
-			}
-
-			leitor.close();
+                    try (BufferedReader leitor = new BufferedReader(fr)) {
+                        String linha = leitor.readLine();
+                        
+                        while (linha  != null) {
+                            adicionarFilhos(new File(linha));
+                            linha = leitor.readLine();
+                        }
+                    }
 		} catch (IOException ex) { ex.printStackTrace(); }
 	}
 
@@ -200,12 +199,10 @@ public class ArvoreDeProjetos extends JPanel {
 	* Salva o caminho dos projetos abertos, este método é chamado antes de o programa ser fechado.
 	*/
 	public void salvarProjetos() {
-		try {
-			FileWriter fw = new FileWriter(dir);
+		try (FileWriter fw = new FileWriter(dir)) {
 			for (String s : projetosList) {
 				fw.write(s + "\n");
 			}
-			fw.close();
 		} catch (IOException ex) { ex.printStackTrace(); }
 	}
 
@@ -218,16 +215,16 @@ public class ArvoreDeProjetos extends JPanel {
 	public void listarArquivos(String caminho, DefaultMutableTreeNode principal, boolean recursivo) {
 		File[] filhos = new File(caminho).listFiles();
 
-		for (int i = 0; i < filhos.length; i++) {
-			DefaultMutableTreeNode no = new DefaultMutableTreeNode(filhos[i].getName());
-			arquivos.put(filhos[i].getName(), filhos[i].toString());
-			if (filhos[i].isDirectory() && recursivo) {
-				principal.add(no);
-				listarArquivos(filhos[i].getPath(), no, recursivo);
-			} else if (!filhos[i].isDirectory()) {
-				principal.add(no);
-			}
-		}
+            for (File filho : filhos) {
+                DefaultMutableTreeNode no = new DefaultMutableTreeNode(filho.getName());
+                arquivos.put(filho.getName(), filho.toString());
+                if (filho.isDirectory() && recursivo) {
+                    principal.add(no);
+                    listarArquivos(filho.getPath(), no, recursivo);
+                } else if (!filho.isDirectory()) {
+                    principal.add(no);
+                }
+            }
 	}
 
 	/**

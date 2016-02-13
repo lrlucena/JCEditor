@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -60,7 +59,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.tree.TreePath;
-
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.Theme;
@@ -77,9 +75,9 @@ import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 public class JCEditor extends JFrame {
 	private AreaDeTexto at;
 	private JTabbedPane arquivos;
-	private Font roboto = new Font("Roboto Light", Font.PLAIN, 14);
-	private JLabel separador = new JLabel("   ");
-	private JLabel separador2 = new JLabel("   ");
+	private final Font roboto = new Font("Roboto Light", Font.PLAIN, 14);
+	private final JLabel separador = new JLabel("   ");
+	private final JLabel separador2 = new JLabel("   ");
 	private JLabel fonteAtual, linguagem;
 	private JToolBar barraS;
 	private JMenuItem novoArq, salvarArq, salvarArqComo, abrirArq, addProjeto,
@@ -106,14 +104,14 @@ public class JCEditor extends JFrame {
 	private int tamanhoFonte = 12;
 	private String titulo, auxArquivo, auxLinguagem;
 	public String sLAF, sTema;
-	private List<AreaDeTexto> lista = new ArrayList<>();
-	private List<String> arquivosAbertos = new ArrayList<>();
-	private JRadioButtonMenuItem[] menusAparencia = new JRadioButtonMenuItem[14];
+	private final List<AreaDeTexto> lista = new ArrayList<>();
+	private final List<String> arquivosAbertos = new ArrayList<>();
+	private final JRadioButtonMenuItem[] menusAparencia = new JRadioButtonMenuItem[14];
 	private JScrollPane scrollPane;
 	private JSplitPane painelSeparador, painelPrincipal;
 	private ArvoreDeProjetos adp;
 	private TerminalPotigol terminal;
-	private String sistemaOperacional = System.getProperty("os.name");
+	private final String sistemaOperacional = System.getProperty("os.name");
 
 	/**
 	 * O construtor define um título e chama o método de construção da interface
@@ -713,7 +711,7 @@ public class JCEditor extends JFrame {
 	private void salvarAoSair() {
 		for (int i = 0; i < lista.size(); i++) {
 			if (lista.get(i).arquivoModificado()) {
-				String nomeArquivo = null;
+				String nomeArquivo;
 				if (lista.get(i).getArquivo() == null) {
 					nomeArquivo = "Sem nome";
 				} else {
@@ -1572,7 +1570,7 @@ public class JCEditor extends JFrame {
 			try {
 				Desktop.getDesktop().browse(
 						URI.create("http://potigol.github.io"));
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				JOptionPane.showMessageDialog(null,
 						"Não foi possível abrir a página.", "Erro",
 						JOptionPane.ERROR_MESSAGE);
