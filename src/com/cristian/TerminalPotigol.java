@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -104,7 +105,7 @@ public class TerminalPotigol extends JTabbedPane {
 				Thread.sleep(500);
 				inserir("Operação finalizada.\n");
 				atualizarEntrada();
-			} catch (Exception ex) {  }
+			} catch (InterruptedException ex) {  }
 		}
 
 		@Override

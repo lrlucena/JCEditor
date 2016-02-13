@@ -1,9 +1,8 @@
 package com.cristian;
 
-import javax.swing.JProgressBar;
-import java.util.List;
-import java.util.ArrayList;
 import java.awt.EventQueue;
+
+import javax.swing.JProgressBar;
 
 /**
 * Exibe uma JProgressBar contendo a quantidade de memória utilizada e total.
@@ -13,9 +12,9 @@ import java.awt.EventQueue;
 */
 
 public class BarraDeMemoria extends JProgressBar {
-	private Thread t = null;
+	private Thread t;
 	private LeitorDeMemoria leitor = new LeitorDeMemoria();
-	final int MEMORIA_MAXIMA = (int) ((float) Runtime.getRuntime().maxMemory() / 1048576);
+	final int MEMORIA_MAXIMA = (int) ((double) Runtime.getRuntime().maxMemory() / 1048576);
 
 	/**
 	* O construtor se encarrega de definir o valor máximo da barra de progresso,
@@ -47,6 +46,7 @@ public class BarraDeMemoria extends JProgressBar {
 		/* Captura a quantidade de memória total e livre, depois é realizada a divisão da subtração
 		   das mesmas por 1048576.0, para se obter o valor em MB. Em seguida, o método atualizarBarra
 		   é chamado para fazer a exibição dos valores. */
+		@Override
 		public void run() {
 			try {
 				while (!Thread.interrupted()) {
@@ -62,12 +62,10 @@ public class BarraDeMemoria extends JProgressBar {
 
 		/* Define o valor da barra de progresso, seu texto e ToolTip */
 		public void atualizarBarra(final double memoriaUsada) {
-			EventQueue.invokeLater(new Runnable() {
-				public void run() {
-					setValue((int) (memoriaUsada * 100.0 / MEMORIA_MAXIMA));
-					setString(String.format("%.2fMB de %dMB", memoriaUsada, MEMORIA_MAXIMA));
-					setToolTipText(String.format("Memória: %.2fMB de %dMB", memoriaUsada, MEMORIA_MAXIMA));
-				}
+			EventQueue.invokeLater(() -> {
+				setValue((int) (memoriaUsada * 100.0 / MEMORIA_MAXIMA));
+				setString(String.format("%.2fMB de %dMB", memoriaUsada, MEMORIA_MAXIMA));
+				setToolTipText(String.format("Memória: %.2fMB de %dMB", memoriaUsada, MEMORIA_MAXIMA));
 			});
 		}
 	}

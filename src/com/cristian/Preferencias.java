@@ -1,19 +1,20 @@
 package com.cristian;
 
-import javax.swing.UIManager;
-import javax.swing.JOptionPane;
-import java.io.FileWriter;
-import java.io.FileReader;
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 /**
 * Classe responsável por abrir o programa com as devidas configurações
@@ -192,7 +193,7 @@ public class Preferencias {
 	/**
 	* Salva o caminho dos arquivos (contidos na ArrayList), para serem abertos novamente na próxima execução.
 	*/
-	public void salvarArquivosAbertos(ArrayList<String> lista) {
+	public void salvarArquivosAbertos(List<String> lista) {
 		try {
 			FileWriter fw = new FileWriter(new File(System.getProperty("user.home") + "/ConfigJCE/arquivos.list"));
 			for (String l : lista) {
@@ -219,7 +220,7 @@ public class Preferencias {
 
 		try {
 			zip = new ZipFile(arq);
-			Enumeration e = zip.entries();
+			Enumeration<?> e = zip.entries();
 			while (e.hasMoreElements()) {
 				ZipEntry entrada = (ZipEntry) e.nextElement();
 				arquivo = new File(dir, entrada.getName());

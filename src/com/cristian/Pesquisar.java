@@ -4,15 +4,16 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-import javax.swing.JTextArea;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
 import javax.swing.FocusManager;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 /**
@@ -71,7 +72,7 @@ public class Pesquisar extends JToolBar {
 					g2.drawString("Substituir", 5, 18);
 					g2.dispose();
 				}
-			}};;
+			}};
 
 		fieldPesquisar.addActionListener(new PesquisarListener());
 		fieldPesquisar.addKeyListener(new OcultarBarraListener());
@@ -103,10 +104,9 @@ public class Pesquisar extends JToolBar {
 		if (pos < 0) {
 			posicaoInicial = 0;
 			return;
-		} else {
-			areaDeTexto.select(pos, pos + textoPesquisar.length());
-			posicaoInicial = pos + textoPesquisar.length();
 		}
+		areaDeTexto.select(pos, pos + textoPesquisar.length());
+		posicaoInicial = pos + textoPesquisar.length();
 	}
 
 	/**
@@ -120,6 +120,7 @@ public class Pesquisar extends JToolBar {
 	* Evento de pesquisa, apenas chama o próprio método pesquisar.
 	*/
 	class PesquisarListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent ev) {
 			pesquisar();
 		}
@@ -129,6 +130,7 @@ public class Pesquisar extends JToolBar {
 	* Evento que chama o método pesquisar (que também tem a função de pesquisar a próxima String).
 	*/
 	class ProximoListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent ev) {
 			pesquisar();
 		}
@@ -138,6 +140,7 @@ public class Pesquisar extends JToolBar {
 	* Seleciona o local que possui a String selecionada anteriormente.
 	*/
 	class VoltarListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent ev) {
 			String textoPesquisar = fieldPesquisar.getText();
 			int pos = areaDeTexto.getText().lastIndexOf(textoPesquisar,
@@ -146,10 +149,9 @@ public class Pesquisar extends JToolBar {
 			if (pos < 0) {
 				posicaoInicial = 1;
 				return;
-			} else {
-				areaDeTexto.select(pos, pos + textoPesquisar.length());
-				posicaoInicial = pos + textoPesquisar.length();
 			}
+			areaDeTexto.select(pos, pos + textoPesquisar.length());
+			posicaoInicial = pos + textoPesquisar.length();
 		}
 	}
 
@@ -157,6 +159,7 @@ public class Pesquisar extends JToolBar {
 	* Substitui a String selecionada.
 	*/
 	class SubstituirListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent ev) {
 			if (fieldSubstituir.getText().equals("")) {
 				return;
@@ -171,6 +174,7 @@ public class Pesquisar extends JToolBar {
 	* o texto digitado no fieldSubstituir.
 	*/
 	class SubstituirTodosListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent ev) {
 			if (fieldSubstituir.getText().equals("")) {
 				return;
@@ -186,6 +190,7 @@ public class Pesquisar extends JToolBar {
 	* Substitui a String selecionada quando o usuário pressionar enter.
 	*/
 	class FieldSubstituirListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent ev) {
 			pesquisar();
 			if (fieldSubstituir.getText().equals("") || fieldPesquisar.getText().equals("")) {
@@ -200,13 +205,16 @@ public class Pesquisar extends JToolBar {
 	* Oculta a área de pesquisa quando Esc for pressionado.
 	*/
 	class OcultarBarraListener implements KeyListener {
+		@Override
 		public void keyPressed(KeyEvent ev) {
 			if (ev.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				areaDeTexto.requestFocus();
 				Pesquisar.this.setVisible(false);
 			}
 		}
+		@Override
 		public void keyReleased(KeyEvent ev) {  }
+		@Override
 		public void keyTyped(KeyEvent ev) {  }
 	}
 
@@ -214,6 +222,7 @@ public class Pesquisar extends JToolBar {
 	* Oculta a área de pesquisa quando o botão fechar for clicado.
 	*/
 	class OcultarListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent ev) {
 			areaDeTexto.requestFocus();
 			Pesquisar.this.setVisible(false);

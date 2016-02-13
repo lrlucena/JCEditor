@@ -1,8 +1,9 @@
 package com.cristian;
 
+import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.Color;
+
 import javax.swing.JButton;
 
 /**
@@ -31,6 +32,7 @@ public class EfeitoBtn {
 			* depois irá colocar um tom de cinza como fundo do botão.
 			* @param ev MouseEvent - contém o evento do mouse
 			*/
+			@Override
 			public void mouseEntered(MouseEvent ev) {
 				btn.setContentAreaFilled(true);
 				btn.setBackground(new Color(109, 117, 121));
@@ -41,6 +43,7 @@ public class EfeitoBtn {
 			* este método não vai permitir que o botão tenha um fundo.
 			* @param ev MouseEvent - contém o evento do mouse
 			*/
+			@Override
 			public void mouseExited(MouseEvent ev) {
 				btn.setContentAreaFilled(false);
 			}

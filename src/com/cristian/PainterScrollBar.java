@@ -1,9 +1,10 @@
 package com.cristian;
 
-import javax.swing.Painter;
 import java.awt.Color;
 import java.awt.Graphics2D;
+
 import javax.swing.JComponent;
+import javax.swing.Painter;
 
 /**
 * Classe responsável pela criação e cor da JScrollBar do LookAndFeel JCE

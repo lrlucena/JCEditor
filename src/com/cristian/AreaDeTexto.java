@@ -2,31 +2,33 @@ package com.cristian;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Cursor;
-import javax.swing.JOptionPane;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
+import java.awt.Font;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.OutputStreamWriter;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
-import java.util.Map;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
-import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
-import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rsyntaxtextarea.Theme;
-import org.fife.ui.rtextarea.RTextScrollPane;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.java.JavaLanguageSupport;
+import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 /**
 * Classe responsável por funções lógicas do JTextArea atual.
@@ -198,15 +200,14 @@ public class AreaDeTexto extends JPanel {
 	public void salvarComo() {
 		if (fileChooser().showSaveDialog(this) == JFileChooser.CANCEL_OPTION) {
 			return;
-		} else {
-			setArquivo(fileChooser().getSelectedFile());
-			extensao(fileChooser().getSelectedFile());
-				if (arquivo.exists()) {
-					JOptionPane.showMessageDialog(this, "Sobrescrever?");
-				}
-			salvar(texto);
-			extensao(arquivo);
 		}
+		setArquivo(fileChooser().getSelectedFile());
+		extensao(fileChooser().getSelectedFile());
+			if (arquivo.exists()) {
+				JOptionPane.showMessageDialog(this, "Sobrescrever?");
+			}
+		salvar(texto);
+		extensao(arquivo);
 	}
 
 	/**
@@ -264,7 +265,7 @@ public class AreaDeTexto extends JPanel {
 	* definir o nome que será exibido no JLabel.
 	*/
 	public void verificarNome() {
-		HashMap<String, String> linguagens = new HashMap<>();
+		Map<String, String> linguagens = new HashMap<>();
 		linguagens.put("java", "Java");
 		linguagens.put("py", "Python");
 		linguagens.put("cpp", "C++");

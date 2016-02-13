@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Locale;
+
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -62,6 +63,7 @@ public class PropriedadesSistema extends JDialog {
 			));
 
 		this.addKeyListener(new KeyAdapter() {
+			@Override
 			public void keyPressed(KeyEvent ev) {
 				if (ev.getKeyCode() == KeyEvent.VK_ESCAPE) {
 					PropriedadesSistema.this.dispose();

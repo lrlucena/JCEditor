@@ -1,6 +1,7 @@
 package com.cristian;
 
 import java.io.File;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileView;
@@ -18,6 +19,7 @@ public class JFCFileView extends FileView {
 	* Configura o ícone com base no método isPotigol
 	* @param arquivo File - arquivo a ser verificado
 	*/
+	@Override
 	public Icon getIcon(File arquivo) {
 		Icon icon = null;
 

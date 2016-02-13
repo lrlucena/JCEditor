@@ -1,28 +1,32 @@
 package com.cristian;
 
 import java.awt.BorderLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
-import javax.swing.JOptionPane;
 
 /**
 * Classe responsável por criar a árvore de gerenciamento de projetos
@@ -35,7 +39,7 @@ public class ArvoreDeProjetos extends JPanel {
 	private File arq;
 	private JTree arvore;
 	private Map<String, String> arquivos = new HashMap<>();
-	private ArrayList<String> projetosList = new ArrayList<>();
+	private List<String> projetosList = new ArrayList<>();
 	private DefaultMutableTreeNode pai;
 	private File dir = new File(System.getProperty("user.home") + "/ConfigJCE/projetos.list");
 	private int ret;
@@ -51,6 +55,7 @@ public class ArvoreDeProjetos extends JPanel {
 
 		/* Caso o local clicado na JTree seja válido (!= null), o caminho do arquivo é adicionado a variável arq */
 		arvore.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent ev) {
 				TreePath tp = arvore.getPathForLocation(ev.getX(), ev.getY());
 				if (tp != null) {
@@ -61,18 +66,23 @@ public class ArvoreDeProjetos extends JPanel {
 
 		/* Permite abrir um projeto apenas arrastando e soltando */
 		DropTarget dt = new DropTarget(arvore, new DropTargetListener() {
+			@Override
 			public void dragEnter(DropTargetDragEvent ev) {  }
 
+			@Override
 			public void dragExit(DropTargetEvent ev) {  }
 
+			@Override
 			public void dragOver(DropTargetDragEvent ev) {  }
 
+			@Override
 			public void dropActionChanged(DropTargetDragEvent ev) {  }
 
+			@Override
 			public void drop(DropTargetDropEvent ev) {
 				try {
 					ev.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-					java.util.List lista2 = (java.util.List) ev.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+					List<?> lista2 = (List<?>) ev.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
 
 					for (int i = 0; i < lista2.size(); i++) {
 						File arquivoD = (File) lista2.get(i);
@@ -80,8 +90,7 @@ public class ArvoreDeProjetos extends JPanel {
 							adicionarFilhos(arquivoD);
 						}
 					}
-
-				} catch (Exception ex) {  }
+				} catch (UnsupportedFlavorException | IOException ex) {  }
 			}
 		});
 
@@ -184,7 +193,7 @@ public class ArvoreDeProjetos extends JPanel {
 			}
 
 			leitor.close();
-		} catch (Exception ex) { ex.printStackTrace(); }
+		} catch (IOException ex) { ex.printStackTrace(); }
 	}
 
 	/**
@@ -197,7 +206,7 @@ public class ArvoreDeProjetos extends JPanel {
 				fw.write(s + "\n");
 			}
 			fw.close();
-		} catch (Exception ex) { ex.printStackTrace(); }
+		} catch (IOException ex) { ex.printStackTrace(); }
 	}
 
 	/**
@@ -206,7 +215,7 @@ public class ArvoreDeProjetos extends JPanel {
 	* @param principal DefaultMutableTreeNode - nó no qual serão adicionados os arquivos.
 	* @param recursivo Boolean - permite listar os arquivos de forma recursiva
 	*/
-	public void listarArquivos(String caminho, DefaultMutableTreeNode principal, Boolean recursivo) {
+	public void listarArquivos(String caminho, DefaultMutableTreeNode principal, boolean recursivo) {
 		File[] filhos = new File(caminho).listFiles();
 
 		for (int i = 0; i < filhos.length; i++) {
