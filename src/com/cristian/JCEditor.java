@@ -86,7 +86,7 @@ public class JCEditor extends JFrame {
 	private JRadioButtonMenuItem gerarEstrutura, dobrarCodigo, quebrarLinha;
 	private JMenuBar barraDeMenu;
 	private JMenu menu, editar, sobre, preferencias, lookAndFeel, formatar,
-			linguagemMenu, tema, projeto;
+	linguagemMenu, tema, projeto;
 	private InputStream in;
 	private JButton bExecutarPotigol;
 	private Image icone;
@@ -226,7 +226,7 @@ public class JCEditor extends JFrame {
 				KeyEvent.VK_D, Event.CTRL_MASK | Event.SHIFT_MASK, projeto);
 		configMenu("Propriedades", "propriedades.png",
 				propriedadesProjetoListener, KeyEvent.VK_A, Event.CTRL_MASK
-						| Event.SHIFT_MASK, projeto);
+				| Event.SHIFT_MASK, projeto);
 
 		/*
 		 * Código de configuração dos menus de Look And Feel Sua estrutura é
@@ -288,22 +288,22 @@ public class JCEditor extends JFrame {
 				"ActionScript",
 				linguagemListener("ActionScript",
 						SyntaxConstants.SYNTAX_STYLE_ACTIONSCRIPT), bg2,
-				linguagemMenu);
+						linguagemMenu);
 		configRadioMenus(
 				"Assembly",
 				linguagemListener("Assembly",
 						SyntaxConstants.SYNTAX_STYLE_ASSEMBLER_X86), bg2,
-				linguagemMenu);
+						linguagemMenu);
 		configRadioMenus(
 				"Batch",
 				linguagemListener("Windows Batch",
 						SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH), bg2,
-				linguagemMenu);
+						linguagemMenu);
 		configRadioMenus(
 				"Clojure",
 				linguagemListener("Clojure",
 						SyntaxConstants.SYNTAX_STYLE_CLOJURE), bg2,
-				linguagemMenu);
+						linguagemMenu);
 		configRadioMenus("CSS",
 				linguagemListener("CSS", SyntaxConstants.SYNTAX_STYLE_CSS),
 				bg2, linguagemMenu);
@@ -328,7 +328,7 @@ public class JCEditor extends JFrame {
 				"Fortran",
 				linguagemListener("Fortran",
 						SyntaxConstants.SYNTAX_STYLE_FORTRAN), bg2,
-				linguagemMenu);
+						linguagemMenu);
 		configRadioMenus(
 				"Groovy",
 				linguagemListener("Groovy", SyntaxConstants.SYNTAX_STYLE_GROOVY),
@@ -343,7 +343,7 @@ public class JCEditor extends JFrame {
 				"JavaScript",
 				linguagemListener("JavaScript",
 						SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT), bg2,
-				linguagemMenu);
+						linguagemMenu);
 		configRadioMenus(
 				"Java Server Pages",
 				linguagemListener("Java Server Pages",
@@ -380,7 +380,7 @@ public class JCEditor extends JFrame {
 				"Properties",
 				linguagemListener("Properties",
 						SyntaxConstants.SYNTAX_STYLE_PROPERTIES_FILE), bg2,
-				linguagemMenu);
+						linguagemMenu);
 		configRadioMenus(
 				"Python",
 				linguagemListener("Python", SyntaxConstants.SYNTAX_STYLE_PYTHON),
@@ -395,12 +395,12 @@ public class JCEditor extends JFrame {
 				"Visual Basic",
 				linguagemListener("Visual Basic",
 						SyntaxConstants.SYNTAX_STYLE_VISUAL_BASIC), bg2,
-				linguagemMenu);
+						linguagemMenu);
 		configRadioMenus(
 				"Unix Shell",
 				linguagemListener("Unix Shell",
 						SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL), bg2,
-				linguagemMenu);
+						linguagemMenu);
 		configRadioMenus("XML",
 				linguagemListener("XML", SyntaxConstants.SYNTAX_STYLE_XML),
 				bg2, linguagemMenu);
@@ -539,7 +539,7 @@ public class JCEditor extends JFrame {
 						&& ev.getClickCount() == 2) {
 					adicionarAba(adp.getArq());
 					lista.get(arquivos.getSelectedIndex()).getRSyntax()
-							.requestFocus();
+					.requestFocus();
 
 					if (lista.get(arquivos.getSelectedIndex()).isPotigol()) {
 						bExecutarPotigol.setEnabled(true);
@@ -575,8 +575,8 @@ public class JCEditor extends JFrame {
 
 		getContentPane().add(BorderLayout.NORTH, barraS);
 		getContentPane().add(BorderLayout.SOUTH, panel); // apenas define o
-															// layout dos
-															// componentes
+		// layout dos
+		// componentes
 		getContentPane().add(BorderLayout.CENTER, painelPrincipal);
 		this.setJMenuBar(barraDeMenu);
 		this.setIconImage(icone);
@@ -711,7 +711,7 @@ public class JCEditor extends JFrame {
 				int r = JOptionPane
 						.showConfirmDialog(JCEditor.this,
 								"Você deseja salvar o arquivo \"" + nomeArquivo
-										+ "\"?", "Sair",
+								+ "\"?", "Sair",
 								JOptionPane.YES_NO_CANCEL_OPTION);
 				area.setTexto(area.getRSyntax().getText());
 				if (r == JOptionPane.OK_OPTION) {
@@ -748,25 +748,25 @@ public class JCEditor extends JFrame {
 	 */
 	private void adicionarDocumentListener() {
 		lista.get(arquivos.getSelectedIndex()).getRSyntax().getDocument()
-				.addDocumentListener(new DocumentListener() {
-					@Override
-					public void changedUpdate(DocumentEvent ev) {
-					}
+		.addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent ev) {
+			}
 
-					@Override
-					public void insertUpdate(DocumentEvent ev) {
-						lista.get(arquivos.getSelectedIndex())
-								.arquivoModificado(true);
-						definirTitulo();
-					}
+			@Override
+			public void insertUpdate(DocumentEvent ev) {
+				lista.get(arquivos.getSelectedIndex())
+				.arquivoModificado(true);
+				definirTitulo();
+			}
 
-					@Override
-					public void removeUpdate(DocumentEvent ev) {
-						lista.get(arquivos.getSelectedIndex())
-								.arquivoModificado(true);
-						definirTitulo();
-					}
-				});
+			@Override
+			public void removeUpdate(DocumentEvent ev) {
+				lista.get(arquivos.getSelectedIndex())
+				.arquivoModificado(true);
+				definirTitulo();
+			}
+		});
 	}
 
 	/**
@@ -776,46 +776,46 @@ public class JCEditor extends JFrame {
 	private void arrastarESoltar() {
 		new DropTarget(lista.get(arquivos.getSelectedIndex()).getRSyntax(),
 				new DropTargetListener() {
-					@Override
-					public void dragEnter(DropTargetDragEvent ev) {
-					}
+			@Override
+			public void dragEnter(DropTargetDragEvent ev) {
+			}
 
-					@Override
-					public void dragExit(DropTargetEvent ev) {
-					}
+			@Override
+			public void dragExit(DropTargetEvent ev) {
+			}
 
-					@Override
-					public void dragOver(DropTargetDragEvent ev) {
-					}
+			@Override
+			public void dragOver(DropTargetDragEvent ev) {
+			}
 
-					@Override
-					public void dropActionChanged(DropTargetDragEvent ev) {
-					}
+			@Override
+			public void dropActionChanged(DropTargetDragEvent ev) {
+			}
 
-					@Override
-					public void drop(DropTargetDropEvent ev) {
-						try {
-							ev.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-							List<File> lista2 = (List<File>) ev
-									.getTransferable().getTransferData(
-											DataFlavor.javaFileListFlavor);
+			@Override
+			public void drop(DropTargetDropEvent ev) {
+				try {
+					ev.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+					List<File> lista2 = (List<File>) ev
+							.getTransferable().getTransferData(
+									DataFlavor.javaFileListFlavor);
 
-							for (int i = 0; i < lista2.size(); i++) {
-								File arquivoD = (File) lista2.get(i);
+					for (int i = 0; i < lista2.size(); i++) {
+						File arquivoD = (File) lista2.get(i);
 
-								if (arquivoD.isDirectory()) {
-									adp.adicionarFilhos(arquivoD);
-									return;
-								}
-
-								adicionarAba(arquivoD);
-							}
-
-						} catch (UnsupportedFlavorException | IOException ex) {
-							ex.printStackTrace();
+						if (arquivoD.isDirectory()) {
+							adp.adicionarFilhos(arquivoD);
+							return;
 						}
+
+						adicionarAba(arquivoD);
 					}
-				});
+
+				} catch (UnsupportedFlavorException | IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
 	}
 
 	/**
@@ -830,7 +830,7 @@ public class JCEditor extends JFrame {
 		for (int i = 0; i < lista.size(); i++) {
 			if (arquivos.getTitleAt(i).equals(arquivo.getName())
 					&& lista.get(i).getArquivo().toString()
-							.equals(arquivo.toString())) {
+					.equals(arquivo.toString())) {
 				arquivos.setSelectedIndex(i);
 				return;
 			}
@@ -904,16 +904,16 @@ public class JCEditor extends JFrame {
 
 		if (dobrarCodigo.isSelected()) {
 			lista.get(arquivos.getSelectedIndex()).getRSyntax()
-					.setCodeFoldingEnabled(true);
+			.setCodeFoldingEnabled(true);
 			lista.get(arquivos.getSelectedIndex()).barraDeRolagem()
-					.setFoldIndicatorEnabled(true);
+			.setFoldIndicatorEnabled(true);
 		}
 
 		if (quebrarLinha.isSelected()) {
 			lista.get(arquivos.getSelectedIndex()).getRSyntax()
-					.setLineWrap(true);
+			.setLineWrap(true);
 			lista.get(arquivos.getSelectedIndex()).getRSyntax()
-					.setWrapStyleWord(true);
+			.setWrapStyleWord(true);
 		}
 
 		adicionarDocumentListener();
@@ -944,9 +944,9 @@ public class JCEditor extends JFrame {
 			adt.getRSyntax().setFont(
 					new Font(fonteEscolhida, Font.PLAIN, tamanhoFonte));
 			adt.barraDeRolagem()
-					.getGutter()
-					.setLineNumberFont(
-							new Font("Monospaced", Font.PLAIN, tamanhoFonte));
+			.getGutter()
+			.setLineNumberFont(
+					new Font("Monospaced", Font.PLAIN, tamanhoFonte));
 		}
 		fonteAtual.setText(fonteEscolhida + " / Font.PLAIN / " + tamanhoFonte
 				+ "  |   ");
@@ -1176,7 +1176,7 @@ public class JCEditor extends JFrame {
 				arquivosAbertos));
 
 		lista.get(arquivos.getSelectedIndex()).getRSyntax()
-				.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+		.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
 		arquivos.setToolTipTextAt(arquivos.getSelectedIndex(), "Sem nome");
 		linguagem.setText(lista.get(arquivos.getSelectedIndex()).getLinguagem()
 				+ "   ");
@@ -1235,7 +1235,7 @@ public class JCEditor extends JFrame {
 	private ActionListener lafPadraoListener = ev -> {
 		try {
 			UIManager
-					.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+			.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 			UIManager.getLookAndFeelDefaults().put(
 					"ScrollBar:ScrollBarThumb[Enabled].backgroundPainter",
 					new PainterScrollBar(new Color(69, 69, 69)));
@@ -1337,7 +1337,7 @@ public class JCEditor extends JFrame {
 			String sintaxe) {
 		return ev -> {
 			lista.get(arquivos.getSelectedIndex()).getRSyntax()
-					.setSyntaxEditingStyle(sintaxe);
+			.setSyntaxEditingStyle(sintaxe);
 			updateLanguage(nomeLinguagem);
 
 			if (lista.get(arquivos.getSelectedIndex()).getArquivo() == null
@@ -1358,7 +1358,7 @@ public class JCEditor extends JFrame {
 				.getDefaultInstance();
 		atmf.putMapping("text/portugol", "com.cristian.PortugolTokenMaker");
 		lista.get(arquivos.getSelectedIndex()).getRSyntax()
-				.setSyntaxEditingStyle("text/portugol");
+		.setSyntaxEditingStyle("text/portugol");
 		updateLanguage("Portugol");
 
 		if (lista.get(arquivos.getSelectedIndex()).getArquivo() == null
@@ -1380,7 +1380,7 @@ public class JCEditor extends JFrame {
 				.getDefaultInstance();
 		atmf.putMapping("text/potigol", "com.cristian.PotigolTokenMaker");
 		lista.get(arquivos.getSelectedIndex()).getRSyntax()
-				.setSyntaxEditingStyle("text/potigol");
+		.setSyntaxEditingStyle("text/potigol");
 		updateLanguage("Potigol");
 
 		if (lista.get(arquivos.getSelectedIndex()).getArquivo() != null
@@ -1401,7 +1401,7 @@ public class JCEditor extends JFrame {
 		if (lista.get(arquivos.getSelectedIndex()).arquivoModificado()) {
 			lista.get(arquivos.getSelectedIndex()).salvar(
 					lista.get(arquivos.getSelectedIndex()).getRSyntax()
-							.getText());
+					.getText());
 			definirTitulo();
 		}
 
