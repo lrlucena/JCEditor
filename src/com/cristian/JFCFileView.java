@@ -6,58 +6,63 @@ import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileView;
 
 /**
-* Classe responsável por alterar o ícone de arquivos em Potigol (.poti)
-* @author   Cristian Henrique (cristianmsbr@gmail.com)
-* @version  1.5
-* @since    Segunda atualização
-*/
+ * Classe responsável por alterar o ícone de arquivos em Potigol (.poti)
+ *
+ * @author Cristian Henrique (cristianmsbr@gmail.com)
+ * @version 1.5
+ * @since Segunda atualização
+ */
 public class JFCFileView extends FileView {
-	private Icon icone;
 
-	/**
-	* Configura o ícone com base no método isPotigol
-	* @param arquivo File - arquivo a ser verificado
-	*/
-	@Override
-	public Icon getIcon(File arquivo) {
-		Icon icon = null;
+    private Icon icone;
 
-		if (isPotigol(arquivo)) {
-			icon = icone;
-		}
+    /**
+     * Configura o ícone com base no método isPotigol
+     *
+     * @param arquivo File - arquivo a ser verificado
+     */
+    @Override
+    public Icon getIcon(File arquivo) {
+        Icon icon = null;
 
-		return icon;
-	}
+        if (isPotigol(arquivo)) {
+            icon = icone;
+        }
 
-	/**
-	* Verifica se o arquivo é um arquivo Potigol, leva-se em consideração
-	* a extensão do mesmo
-	* @param arquivo File - arquivo a ser verificado
-	*/
-	private boolean isPotigol(File arquivo) {
-		String extensao = getExtensao(arquivo);
-		boolean isPotigol = false;
+        return icon;
+    }
 
-		if (extensao != null) {
-			isPotigol = extensao.equals("poti");
-			icone = new ImageIcon(getClass().getResource("imagens/potigol.png"));
-		}
-		return isPotigol;
-	}
+    /**
+     * Verifica se o arquivo é um arquivo Potigol, leva-se em consideração a
+     * extensão do mesmo
+     *
+     * @param arquivo File - arquivo a ser verificado
+     */
+    private boolean isPotigol(File arquivo) {
+        String extensao = getExtensao(arquivo);
+        boolean isPotigol = false;
 
-	/**
-	* Retorna a extensão do arquivo
-	* @param arquivo File - arquivo a ser verificado
-	*/
-	private String getExtensao(File arquivo) {
-		String arq = arquivo.getPath();
-		String extensao = null;
-		int i = arq.lastIndexOf('.');
+        if (extensao != null) {
+            isPotigol = extensao.equals("poti");
+            icone = new ImageIcon(getClass().getResource("imagens/potigol.png"));
+        }
+        return isPotigol;
+    }
 
-		if (i > 0 && i < arq.length()) {
-			extensao = arq.substring(i + 1).toLowerCase();
-		}
+    /**
+     * Retorna a extensão do arquivo
+     *
+     * @param arquivo File - arquivo a ser verificado
+     */
+    private String getExtensao(File arquivo) {
+        String arq = arquivo.getPath();
+        String extensao = null;
+        int i = arq.lastIndexOf('.');
 
-		return extensao;
-	}
+        if (i > 0 && i < arq.length()) {
+            extensao = arq.substring(i + 1).toLowerCase();
+        }
+
+        return extensao;
+    }
 }

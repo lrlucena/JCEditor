@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -26,13 +27,14 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
 /**
-* Classe que executa os arquivos do Potigol.
-* @author   Cristian Henrique (cristianmsbr@gmail.com)
-* @version  1.0
-* @since    Versão 2.0
-*/
-
+ * Classe que executa os arquivos do Potigol.
+ *
+ * @author Cristian Henrique (cristianmsbr@gmail.com)
+ * @version 1.0
+ * @since Versão 2.0
+ */
 public class TerminalPotigol extends JTabbedPane {
+
 	private Comando cmd;
 	private final Console consolePotigol;
 	private final JScrollPane barra;
@@ -42,18 +44,18 @@ public class TerminalPotigol extends JTabbedPane {
 		barra = new JScrollPane(consolePotigol);
 		barra.setBorder(null);
 		this.addTab("Terminal do Potigol  ", barra);
-		this.setIconAt(0, new ImageIcon(getClass().getResource("imagens/console.png")));
+		this.setIconAt(0,
+				new ImageIcon(getClass().getResource("imagens/console.png")));
 	}
 
 	interface ComandoListener {
 		public void saidaComando(String s);
-
 		public void comandoConcluido(String cmd, int r);
-
 		public void falhaAoExecutar(Exception ex);
 	}
 
 	class Console extends JTextArea implements ComandoListener, Terminal {
+
 		private int entradaUsuario;
 
 		Console() {
@@ -61,16 +63,20 @@ public class TerminalPotigol extends JTabbedPane {
 			this.setBorder(null);
 
 			try {
-				InputStream is = TerminalPotigol.class.getResourceAsStream("DejaVuSansMono.ttf");
+				InputStream is = TerminalPotigol.class
+						.getResourceAsStream("DejaVuSansMono.ttf");
 				Font fonte = Font.createFont(Font.TRUETYPE_FONT, is);
 				fonte = fonte.deriveFont(13.0F);
 				this.setFont(fonte);
-			} catch (FontFormatException | IOException ex) {  }
+			} catch (FontFormatException | IOException ex) {
+				ex.printStackTrace();
+			}
 
 			this.setForeground(Color.WHITE);
 			this.setCaretColor(Color.WHITE);
 			this.setBackground(Color.BLACK);
-			((AbstractDocument) this.getDocument()).setDocumentFilter(new DFilter(this));
+			((AbstractDocument) this.getDocument())
+					.setDocumentFilter(new DFilter(this));
 
 			InputMap im = this.getInputMap(WHEN_FOCUSED);
 			ActionMap am = this.getActionMap();
@@ -80,14 +86,18 @@ public class TerminalPotigol extends JTabbedPane {
 				@Override
 				public void actionPerformed(ActionEvent ev) {
 					if (cmd.emExecucao()) {
-						int alcance = Console.this.getCaretPosition() - entradaUsuario;
+						int alcance = Console.this.getCaretPosition()
+								- entradaUsuario;
 
 						try {
-							String s = Console.this.getText(entradaUsuario, alcance).trim();
+							String s = Console.this.getText(entradaUsuario,
+									alcance).trim();
 							entradaUsuario += alcance;
 
 							cmd.enviar(s + "\n");
-						} catch (Exception ex) {  }
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
 
 						acaoAntiga.actionPerformed(ev);
 					}
@@ -97,7 +107,7 @@ public class TerminalPotigol extends JTabbedPane {
 
 		@Override
 		public void saidaComando(String s) {
-			SwingUtilities.invokeLater(new Anexar(this, s));
+			SwingUtilities.invokeLater(anexar(this, s));
 		}
 
 		@Override
@@ -106,12 +116,15 @@ public class TerminalPotigol extends JTabbedPane {
 				Thread.sleep(500);
 				inserir("Operação finalizada.\n");
 				atualizarEntrada();
-			} catch (InterruptedException ex) {  }
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}
 		}
 
 		@Override
 		public void falhaAoExecutar(Exception ex) {
-			SwingUtilities.invokeLater(new Anexar(this, "Falha ao executar o Potigol!"));
+			SwingUtilities.invokeLater(anexar(this,
+					"Falha ao executar o Potigol!"));
 		}
 
 		@Override
@@ -136,8 +149,8 @@ public class TerminalPotigol extends JTabbedPane {
 		if (!cmd.emExecucao()) {
 			consolePotigol.requestFocus();
 			consolePotigol.inserir("Aguarde...\n");
-			cmd.executar("java -jar " + System.getProperty("user.home") + "/ConfigJCE/.potigol/potigol.jar "
-				+ arquivo.toString());
+			cmd.executar("java -jar " + System.getProperty("user.home")
+					+ "/ConfigJCE/.potigol/potigol.jar " + arquivo.toString());
 		}
 	}
 
@@ -146,29 +159,21 @@ public class TerminalPotigol extends JTabbedPane {
 	}
 
 	interface EntradaUsuario {
+
 		public int getEntradaUsuario();
 	}
 
 	interface Terminal extends EntradaUsuario {
+
 		public void inserir(String s);
 	}
 
-	class Anexar implements Runnable {
-		private Terminal terminal;
-		private String s;
-
-		public Anexar(Terminal adt, String st) {
-			this.terminal = adt;
-			this.s = st;
-		}
-
-		@Override
-		public void run() {
-			terminal.inserir(s);
-		}
+	private Runnable anexar(Terminal terminal, String s) {
+		return () -> terminal.inserir(s);
 	}
 
 	class Comando {
+
 		private final ComandoListener cmdListener;
 		private Processo p;
 
@@ -192,12 +197,13 @@ public class TerminalPotigol extends JTabbedPane {
 			}
 		}
 
-		public void enviar(String s) throws Exception {
+		public void enviar(String s) throws IOException {
 			p.escrever(s);
 		}
 	}
 
 	class Processo extends Thread {
+
 		private final List<String> comandos;
 		private final ComandoListener cmdListener;
 		private Process p;
@@ -214,7 +220,8 @@ public class TerminalPotigol extends JTabbedPane {
 				ProcessBuilder pb = new ProcessBuilder(comandos);
 				pb.redirectErrorStream();
 				p = pb.start();
-				FluxoLeitor leitor = new FluxoLeitor(cmdListener, p.getInputStream());
+				FluxoLeitor leitor = new FluxoLeitor(cmdListener,
+						p.getInputStream());
 
 				int r = p.waitFor();
 				leitor.join();
@@ -226,11 +233,13 @@ public class TerminalPotigol extends JTabbedPane {
 
 				cmdListener.comandoConcluido(sj.toString(), r);
 			} catch (IOException | InterruptedException ex) {
+				System.out.println(ex.getMessage());
 				cmdListener.falhaAoExecutar(ex);
+
 			}
 		}
 
-		public void escrever(String s) throws Exception {
+		public void escrever(String s) throws IOException {
 			if (p != null && p.isAlive()) {
 				p.getOutputStream().write(s.getBytes());
 				p.getOutputStream().flush();
@@ -239,6 +248,7 @@ public class TerminalPotigol extends JTabbedPane {
 	}
 
 	class FluxoLeitor extends Thread {
+
 		private final InputStream is;
 		private final ComandoListener cmdListener;
 
@@ -255,11 +265,14 @@ public class TerminalPotigol extends JTabbedPane {
 				while ((valor = is.read()) != -1) {
 					cmdListener.saidaComando(Character.toString((char) valor));
 				}
-			} catch (IOException ex) {  }
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 
 	public class DFilter extends DocumentFilter {
+
 		private final EntradaUsuario eUsuario;
 
 		public DFilter(EntradaUsuario eu) {
@@ -267,21 +280,24 @@ public class TerminalPotigol extends JTabbedPane {
 		}
 
 		@Override
-		public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+		public void insertString(FilterBypass fb, int offset, String string,
+				AttributeSet attr) throws BadLocationException {
 			if (offset >= eUsuario.getEntradaUsuario()) {
 				super.insertString(fb, offset, string, attr);
 			}
 		}
 
 		@Override
-		public void remove(FilterBypass fb, int offset, int length) throws BadLocationException {
+		public void remove(FilterBypass fb, int offset, int length)
+				throws BadLocationException {
 			if (offset >= eUsuario.getEntradaUsuario()) {
 				super.remove(fb, offset, length);
 			}
 		}
 
 		@Override
-		public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+		public void replace(FilterBypass fb, int offset, int length,
+				String text, AttributeSet attrs) throws BadLocationException {
 			if (offset >= eUsuario.getEntradaUsuario()) {
 				super.replace(fb, offset, length, text, attrs);
 			}

@@ -16,215 +16,233 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 /**
-* Classe que realiza a pesquisa no JTextArea atual
-* @author    Cristian Henrique (cristianmsbr@gmail.com)
-* @version   1.9
-* @since     Segunda atualização
-*/
-
+ * Classe que realiza a pesquisa no JTextArea atual
+ *
+ * @author Cristian Henrique (cristianmsbr@gmail.com)
+ * @version 1.9
+ * @since Segunda atualização
+ */
 public class Pesquisar extends JToolBar {
-	private JTextField fieldPesquisar, fieldSubstituir;
-	private final JButton[] botoes = new JButton[6];
-	private final ActionListener[] eventos = {new PesquisarListener(), new SubstituirListener(),
-		new SubstituirTodosListener(), new VoltarListener(), new ProximoListener(), new OcultarListener()};
-	private final String[] imagens = {"pesquisar25", "substituir25", "substituirTodos25", "anterior25", "proximo25", "sair25"};
-	private final String[] toolTip = {"Pesquisar", "Substituir", "Substituir todos", "Anterior", "Próximo", "Ocultar"};
-	private final JTextArea areaDeTexto;
-	private int posicaoInicial = 0;
 
-	/**
-	* O construtor é responsável por iniciar a interface de pesquisa.
-	*/
-	public Pesquisar(JTextArea adt) {
-		construirGUI();
-		this.areaDeTexto = adt;
-		this.areaDeTexto.requestFocus();
-		this.setFloatable(false);
-	}
+    private JTextField fieldPesquisar, fieldSubstituir;
+    private final JButton[] botoes = new JButton[6];
+    private final ActionListener[] eventos = {new PesquisarListener(), new SubstituirListener(),
+        new SubstituirTodosListener(), new VoltarListener(), new ProximoListener(), new OcultarListener()};
+    private final String[] imagens = {"pesquisar25", "substituir25", "substituirTodos25", "anterior25", "proximo25", "sair25"};
+    private final String[] toolTip = {"Pesquisar", "Substituir", "Substituir todos", "Anterior", "Próximo", "Ocultar"};
+    private final JTextArea areaDeTexto;
+    private int posicaoInicial = 0;
 
-	/**
-	* Constrói a GUI e adiciona eventos aos botões.
-	*/
-	public void construirGUI() {
-		fieldPesquisar = new JTextField(15) {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
+    /**
+     * O construtor é responsável por iniciar a interface de pesquisa.
+     */
+    public Pesquisar(JTextArea adt) {
+        construirGUI();
+        this.areaDeTexto = adt;
+        this.areaDeTexto.requestFocus();
+        this.setFloatable(false);
+    }
 
-				if (getText().isEmpty() && ! (FocusManager.getCurrentKeyboardFocusManager().getFocusOwner() == this)) {
-					Graphics2D g2 = (Graphics2D) g.create();
-					g2.setBackground(Color.GRAY);
-					g2.setFont(getFont().deriveFont(Font.PLAIN));
-					g2.drawString("Pesquisar", 5, 18);
-					g2.dispose();
-				}
-			}};
-		fieldSubstituir = new JTextField(15) {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
+    /**
+     * Constrói a GUI e adiciona eventos aos botões.
+     */
+    public void construirGUI() {
+        fieldPesquisar = new JTextField(15) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
 
-				if (getText().isEmpty() && ! (FocusManager.getCurrentKeyboardFocusManager().getFocusOwner() == this)) {
-					Graphics2D g2 = (Graphics2D) g.create();
-					g2.setBackground(Color.GRAY);
-					g2.setFont(getFont().deriveFont(Font.PLAIN));
-					g2.drawString("Substituir", 5, 18);
-					g2.dispose();
-				}
-			}};
+                if (getText().isEmpty() && !(FocusManager.getCurrentKeyboardFocusManager().getFocusOwner() == this)) {
+                    Graphics2D g2 = (Graphics2D) g.create();
+                    g2.setBackground(Color.GRAY);
+                    g2.setFont(getFont().deriveFont(Font.PLAIN));
+                    g2.drawString("Pesquisar", 5, 18);
+                    g2.dispose();
+                }
+            }
+        };
+        fieldSubstituir = new JTextField(15) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
 
-		fieldPesquisar.addActionListener(new PesquisarListener());
-		fieldPesquisar.addKeyListener(new OcultarBarraListener());
-		fieldSubstituir.addKeyListener(new OcultarBarraListener());
-		this.add(fieldPesquisar);
-		this.add(fieldSubstituir);
+                if (getText().isEmpty() && !(FocusManager.getCurrentKeyboardFocusManager().getFocusOwner() == this)) {
+                    Graphics2D g2 = (Graphics2D) g.create();
+                    g2.setBackground(Color.GRAY);
+                    g2.setFont(getFont().deriveFont(Font.PLAIN));
+                    g2.drawString("Substituir", 5, 18);
+                    g2.dispose();
+                }
+            }
+        };
 
-		for (int i = 0; i < botoes.length; i++) {
-			botoes[i] = new JButton(new ImageIcon(getClass().getResource("imagens/25x25/" + imagens[i] + ".png")));
-			botoes[i].addActionListener(eventos[i]);
-			botoes[i].setToolTipText(toolTip[i]);
-			EfeitoBtn efBtn = new EfeitoBtn(botoes[i]);
-			this.add(botoes[i]);
-		}
-	}
+        fieldPesquisar.addActionListener(new PesquisarListener());
+        fieldPesquisar.addKeyListener(new OcultarBarraListener());
+        fieldSubstituir.addKeyListener(new OcultarBarraListener());
+        this.add(fieldPesquisar);
+        this.add(fieldSubstituir);
 
-	/**
-	* Realiza a pesquisa no JTextArea, se o botão for pressionado mais de uma vez,
-	* a próxima String com o texto digitado em "fieldPesquisar" será selecionada.
-	*/
-	private void pesquisar() {
-		if (fieldPesquisar.getText().isEmpty()) {
-			return;
-		}
+        for (int i = 0; i < botoes.length; i++) {
+            botoes[i] = new JButton(new ImageIcon(getClass().getResource("imagens/25x25/" + imagens[i] + ".png")));
+            botoes[i].addActionListener(eventos[i]);
+            botoes[i].setToolTipText(toolTip[i]);
+            EfeitoBtn efBtn = new EfeitoBtn(botoes[i]);
+            this.add(botoes[i]);
+        }
+    }
 
-		String textoPesquisar = fieldPesquisar.getText();
-		int pos = areaDeTexto.getText().indexOf(textoPesquisar, posicaoInicial);
+    /**
+     * Realiza a pesquisa no JTextArea, se o botão for pressionado mais de uma
+     * vez, a próxima String com o texto digitado em "fieldPesquisar" será
+     * selecionada.
+     */
+    private void pesquisar() {
+        if (fieldPesquisar.getText().isEmpty()) {
+            return;
+        }
 
-		if (pos < 0) {
-			posicaoInicial = 0;
-			return;
-		}
-		areaDeTexto.select(pos, pos + textoPesquisar.length());
-		posicaoInicial = pos + textoPesquisar.length();
-	}
+        String textoPesquisar = fieldPesquisar.getText();
+        int pos = areaDeTexto.getText().indexOf(textoPesquisar, posicaoInicial);
 
-	/**
-	* Retorna o campo de pesquisa, este receberá focus quando a barra estiver visível.
-	*/
-	public JTextField getFieldPesquisar() {
-		return this.fieldPesquisar;
-	}
+        if (pos < 0) {
+            posicaoInicial = 0;
+            return;
+        }
+        areaDeTexto.select(pos, pos + textoPesquisar.length());
+        posicaoInicial = pos + textoPesquisar.length();
+    }
 
-	/**
-	* Evento de pesquisa, apenas chama o próprio método pesquisar.
-	*/
-	class PesquisarListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent ev) {
-			pesquisar();
-		}
-	}
+    /**
+     * Retorna o campo de pesquisa, este receberá focus quando a barra estiver
+     * visível.
+     */
+    public JTextField getFieldPesquisar() {
+        return this.fieldPesquisar;
+    }
 
-	/**
-	* Evento que chama o método pesquisar (que também tem a função de pesquisar a próxima String).
-	*/
-	class ProximoListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent ev) {
-			pesquisar();
-		}
-	}
+    /**
+     * Evento de pesquisa, apenas chama o próprio método pesquisar.
+     */
+    class PesquisarListener implements ActionListener {
 
-	/**
-	* Seleciona o local que possui a String selecionada anteriormente.
-	*/
-	class VoltarListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent ev) {
-			String textoPesquisar = fieldPesquisar.getText();
-			int pos = areaDeTexto.getText().lastIndexOf(textoPesquisar,
-				areaDeTexto.getCaretPosition() - textoPesquisar.length() - 1);
+        @Override
+        public void actionPerformed(ActionEvent ev) {
+            pesquisar();
+        }
+    }
 
-			if (pos < 0) {
-				posicaoInicial = 1;
-				return;
-			}
-			areaDeTexto.select(pos, pos + textoPesquisar.length());
-			posicaoInicial = pos + textoPesquisar.length();
-		}
-	}
+    /**
+     * Evento que chama o método pesquisar (que também tem a função de pesquisar
+     * a próxima String).
+     */
+    class ProximoListener implements ActionListener {
 
-	/**
-	* Substitui a String selecionada.
-	*/
-	class SubstituirListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent ev) {
-			if (fieldSubstituir.getText().isEmpty()) {
-				return;
-			}
+        @Override
+        public void actionPerformed(ActionEvent ev) {
+            pesquisar();
+        }
+    }
 
-			areaDeTexto.replaceSelection(fieldSubstituir.getText());
-		}
-	}
+    /**
+     * Seleciona o local que possui a String selecionada anteriormente.
+     */
+    class VoltarListener implements ActionListener {
 
-	/**
-	* Substitui todas as Strings que possuem o texto digitado no fieldPesquisar por
-	* o texto digitado no fieldSubstituir.
-	*/
-	class SubstituirTodosListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent ev) {
-			if (fieldSubstituir.getText().isEmpty()) {
-				return;
-			}
+        @Override
+        public void actionPerformed(ActionEvent ev) {
+            String textoPesquisar = fieldPesquisar.getText();
+            int pos = areaDeTexto.getText().lastIndexOf(textoPesquisar,
+                    areaDeTexto.getCaretPosition() - textoPesquisar.length() - 1);
 
-			String textoPesquisar = fieldPesquisar.getText();
-			String textoSubstituir = fieldSubstituir.getText();
-			areaDeTexto.setText(areaDeTexto.getText().replaceAll(textoPesquisar, textoSubstituir));
-		}
-	}
+            if (pos < 0) {
+                posicaoInicial = 1;
+                return;
+            }
+            areaDeTexto.select(pos, pos + textoPesquisar.length());
+            posicaoInicial = pos + textoPesquisar.length();
+        }
+    }
 
-	/**
-	* Substitui a String selecionada quando o usuário pressionar enter.
-	*/
-	class FieldSubstituirListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent ev) {
-			pesquisar();
-			if (fieldSubstituir.getText().isEmpty() || fieldPesquisar.getText().isEmpty()) {
-				return;
-			}
+    /**
+     * Substitui a String selecionada.
+     */
+    class SubstituirListener implements ActionListener {
 
-			areaDeTexto.replaceSelection(fieldSubstituir.getText());
-		}
-	}
+        @Override
+        public void actionPerformed(ActionEvent ev) {
+            if (fieldSubstituir.getText().isEmpty()) {
+                return;
+            }
 
-	/**
-	* Oculta a área de pesquisa quando Esc for pressionado.
-	*/
-	class OcultarBarraListener implements KeyListener {
-		@Override
-		public void keyPressed(KeyEvent ev) {
-			if (ev.getKeyCode() == KeyEvent.VK_ESCAPE) {
-				areaDeTexto.requestFocus();
-				Pesquisar.this.setVisible(false);
-			}
-		}
-		@Override
-		public void keyReleased(KeyEvent ev) {  }
-		@Override
-		public void keyTyped(KeyEvent ev) {  }
-	}
+            areaDeTexto.replaceSelection(fieldSubstituir.getText());
+        }
+    }
 
-	/**
-	* Oculta a área de pesquisa quando o botão fechar for clicado.
-	*/
-	class OcultarListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent ev) {
-			areaDeTexto.requestFocus();
-			Pesquisar.this.setVisible(false);
-		}
-	}
+    /**
+     * Substitui todas as Strings que possuem o texto digitado no fieldPesquisar
+     * por o texto digitado no fieldSubstituir.
+     */
+    class SubstituirTodosListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent ev) {
+            if (fieldSubstituir.getText().isEmpty()) {
+                return;
+            }
+
+            String textoPesquisar = fieldPesquisar.getText();
+            String textoSubstituir = fieldSubstituir.getText();
+            areaDeTexto.setText(areaDeTexto.getText().replaceAll(textoPesquisar, textoSubstituir));
+        }
+    }
+
+    /**
+     * Substitui a String selecionada quando o usuário pressionar enter.
+     */
+    class FieldSubstituirListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent ev) {
+            pesquisar();
+            if (fieldSubstituir.getText().isEmpty() || fieldPesquisar.getText().isEmpty()) {
+                return;
+            }
+
+            areaDeTexto.replaceSelection(fieldSubstituir.getText());
+        }
+    }
+
+    /**
+     * Oculta a área de pesquisa quando Esc for pressionado.
+     */
+    class OcultarBarraListener implements KeyListener {
+
+        @Override
+        public void keyPressed(KeyEvent ev) {
+            if (ev.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                areaDeTexto.requestFocus();
+                Pesquisar.this.setVisible(false);
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent ev) {
+        }
+
+        @Override
+        public void keyTyped(KeyEvent ev) {
+        }
+    }
+
+    /**
+     * Oculta a área de pesquisa quando o botão fechar for clicado.
+     */
+    class OcultarListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent ev) {
+            areaDeTexto.requestFocus();
+            Pesquisar.this.setVisible(false);
+        }
+    }
 }

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTree;
@@ -28,37 +29,43 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 /**
-* Classe responsável por criar a árvore de gerenciamento de projetos
-* @author   Cristian Henrique (cristianmsbr@gmail.com)
-* @version  1.8
-* @since    Terceira atualização
-*/
-
+ * Classe responsável por criar a árvore de gerenciamento de projetos
+ *
+ * @author Cristian Henrique (cristianmsbr@gmail.com)
+ * @version 1.8
+ * @since Terceira atualização
+ */
 public class ArvoreDeProjetos extends JPanel {
+
 	private File arq;
 	private JTree arvore;
 	private Map<String, String> arquivos = new HashMap<>();
 	private final List<String> projetosList = new ArrayList<>();
 	private final DefaultMutableTreeNode pai;
-	private final File dir = new File(System.getProperty("user.home") + "/ConfigJCE/projetos.list");
+	private final File dir = new File(System.getProperty("user.home")
+			+ "/ConfigJCE/projetos.list");
 	private int ret;
 	private int numArquivos;
 
 	/**
-	* Cria o pai dos outros nós, e adiciona eventos de Drag and Drop.
-	*/
+	 * Cria o pai dos outros nós, e adiciona eventos de Drag and Drop.
+	 */
 	public ArvoreDeProjetos() {
 		pai = new DefaultMutableTreeNode("root");
 		arvore = new JTree(pai);
 		arvore.setRootVisible(false);
 
-		/* Caso o local clicado na JTree seja válido (!= null), o caminho do arquivo é adicionado a variável arq */
+		/*
+		 * Caso o local clicado na JTree seja válido (!= null), o caminho do
+		 * arquivo é adicionado a variável arq
+		 */
 		arvore.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent ev) {
 				TreePath tp = arvore.getPathForLocation(ev.getX(), ev.getY());
 				if (tp != null) {
-					arq = new File(arquivos.get(arvore.getLastSelectedPathComponent().toString()));
+					arq = new File(arquivos.get(arvore
+							.getLastSelectedPathComponent().toString()));
 				}
 			}
 		});
@@ -66,30 +73,35 @@ public class ArvoreDeProjetos extends JPanel {
 		/* Permite abrir um projeto apenas arrastando e soltando */
 		DropTarget dt = new DropTarget(arvore, new DropTargetListener() {
 			@Override
-			public void dragEnter(DropTargetDragEvent ev) {  }
+			public void dragEnter(DropTargetDragEvent ev) {
+			}
 
 			@Override
-			public void dragExit(DropTargetEvent ev) {  }
+			public void dragExit(DropTargetEvent ev) {
+			}
 
 			@Override
-			public void dragOver(DropTargetDragEvent ev) {  }
+			public void dragOver(DropTargetDragEvent ev) {
+			}
 
 			@Override
-			public void dropActionChanged(DropTargetDragEvent ev) {  }
+			public void dropActionChanged(DropTargetDragEvent ev) {
+			}
 
 			@Override
 			public void drop(DropTargetDropEvent ev) {
 				try {
 					ev.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-					List<?> lista2 = (List<?>) ev.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-
-					for (int i = 0; i < lista2.size(); i++) {
-						File arquivoD = (File) lista2.get(i);
+					@SuppressWarnings("unchecked")
+					List<File> lista2 = (List<File>) ev.getTransferable()
+							.getTransferData(DataFlavor.javaFileListFlavor);
+					for (File arquivoD : lista2) {
 						if (arquivoD.isDirectory()) {
 							adicionarFilhos(arquivoD);
 						}
 					}
-				} catch (UnsupportedFlavorException | IOException ex) {  }
+				} catch (UnsupportedFlavorException | IOException ex) {
+				}
 			}
 		});
 
@@ -100,11 +112,15 @@ public class ArvoreDeProjetos extends JPanel {
 	}
 
 	/**
-	* Insere o nó informado na JTree e adiciona o caminho do diretório na ArrayList de projetos.
-	* @param diretorio File - projeto a ser adicionado
-	*/
+	 * Insere o nó informado na JTree e adiciona o caminho do diretório na
+	 * ArrayList de projetos.
+	 *
+	 * @param diretorio
+	 *            File - projeto a ser adicionado
+	 */
 	public void adicionarFilhos(File diretorio) {
-		DefaultMutableTreeNode filho = new DefaultMutableTreeNode(diretorio.getName());
+		DefaultMutableTreeNode filho = new DefaultMutableTreeNode(
+				diretorio.getName());
 		pai.add(filho);
 		((DefaultTreeModel) arvore.getModel()).insertNodeInto(filho, pai, 0);
 		((DefaultTreeModel) arvore.getModel()).reload();
@@ -114,10 +130,11 @@ public class ArvoreDeProjetos extends JPanel {
 	}
 
 	/**
-	* Remove o nó selecionado da JTree e da ArrayList de projetos.
-	*/
+	 * Remove o nó selecionado da JTree e da ArrayList de projetos.
+	 */
 	public void removerProjeto() {
-		DefaultMutableTreeNode selecao = (DefaultMutableTreeNode) arvore.getLastSelectedPathComponent();
+		DefaultMutableTreeNode selecao = (DefaultMutableTreeNode) arvore
+				.getLastSelectedPathComponent();
 		if (selecao == null) {
 			JOptionPane.showMessageDialog(null, "Selecione um projeto.");
 			return;
@@ -136,11 +153,12 @@ public class ArvoreDeProjetos extends JPanel {
 	}
 
 	/**
-	* Informa algumas propriedades do projeto selecionado (nome, tamanho aproximado e quantidade total de arquivos
-	* e diretórios).
-	*/
+	 * Informa algumas propriedades do projeto selecionado (nome, tamanho
+	 * aproximado e quantidade total de arquivos e diretórios).
+	 */
 	public void propriedadesProjeto() {
-		DefaultMutableTreeNode selecao = (DefaultMutableTreeNode) arvore.getLastSelectedPathComponent();
+		DefaultMutableTreeNode selecao = (DefaultMutableTreeNode) arvore
+				.getLastSelectedPathComponent();
 		if (selecao == null) {
 			JOptionPane.showMessageDialog(null, "Selecione um projeto.");
 			return;
@@ -149,20 +167,23 @@ public class ArvoreDeProjetos extends JPanel {
 		for (String s : projetosList) {
 			if (s.contains(selecao.toString())) {
 				tamanho(new File(s));
-				String str = String.format("%.2f MB", ret / 1048576.0);
+				String str = String.format("%.2f MB", ret / 1_048_576.0);
 				JOptionPane.showMessageDialog(null,
-					"Nome: " + selecao.toString() + "\nTamanho: " + str + "\n" + "Total de arquivos: " + numArquivos,
-					"Propriedades", JOptionPane.PLAIN_MESSAGE);
+						"Nome: " + selecao.toString() + "\nTamanho: " + str
+								+ "\n" + "Total de arquivos: " + numArquivos,
+						"Propriedades", JOptionPane.PLAIN_MESSAGE);
 				numArquivos = 0;
 			}
 		}
 	}
 
 	/**
-	* Retorna o tamanho aproximado do diretório informado e também pega a quantidade de arquivos
-	* (armazenada em numArquivos).
-	* @param dir File - diretório que será analisado
-	*/
+	 * Retorna o tamanho aproximado do diretório informado e também pega a
+	 * quantidade de arquivos (armazenada em numArquivos).
+	 *
+	 * @param dir
+	 *            File - diretório que será analisado
+	 */
 	public long tamanho(File dir) {
 		ret = 0;
 		numArquivos += dir.listFiles().length;
@@ -178,65 +199,77 @@ public class ArvoreDeProjetos extends JPanel {
 	}
 
 	/**
-	* Método que lista os projetos salvos (os caminhos são salvos no arquivo
-	* projetos.list), este método é chamado toda vez que o programa é iniciado.
-	*/
+	 * Método que lista os projetos salvos (os caminhos são salvos no arquivo
+	 * projetos.list), este método é chamado toda vez que o programa é iniciado.
+	 */
 	public void listarProjetos() {
 		try {
 			FileReader fr = new FileReader(dir);
-                    try (BufferedReader leitor = new BufferedReader(fr)) {
-                        String linha = leitor.readLine();
-                        
-                        while (linha  != null) {
-                            adicionarFilhos(new File(linha));
-                            linha = leitor.readLine();
-                        }
-                    }
-		} catch (IOException ex) { ex.printStackTrace(); }
+			try (BufferedReader leitor = new BufferedReader(fr)) {
+				String linha = leitor.readLine();
+
+				while (linha != null) {
+					adicionarFilhos(new File(linha));
+					linha = leitor.readLine();
+				}
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	/**
-	* Salva o caminho dos projetos abertos, este método é chamado antes de o programa ser fechado.
-	*/
+	 * Salva o caminho dos projetos abertos, este método é chamado antes de o
+	 * programa ser fechado.
+	 */
 	public void salvarProjetos() {
 		try (FileWriter fw = new FileWriter(dir)) {
 			for (String s : projetosList) {
 				fw.write(s + "\n");
 			}
-		} catch (IOException ex) { ex.printStackTrace(); }
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	/**
-	* Lista os arquivos do diretório informado e os adiciona a um nó na JTree.
-	* @param caminho String - local do diretório a ser listado
-	* @param principal DefaultMutableTreeNode - nó no qual serão adicionados os arquivos.
-	* @param recursivo Boolean - permite listar os arquivos de forma recursiva
-	*/
-	public void listarArquivos(String caminho, DefaultMutableTreeNode principal, boolean recursivo) {
+	 * Lista os arquivos do diretório informado e os adiciona a um nó na JTree.
+	 *
+	 * @param caminho
+	 *            String - local do diretório a ser listado
+	 * @param principal
+	 *            DefaultMutableTreeNode - nó no qual serão adicionados os
+	 *            arquivos.
+	 * @param recursivo
+	 *            Boolean - permite listar os arquivos de forma recursiva
+	 */
+	public void listarArquivos(String caminho,
+			DefaultMutableTreeNode principal, boolean recursivo) {
 		File[] filhos = new File(caminho).listFiles();
 
-            for (File filho : filhos) {
-                DefaultMutableTreeNode no = new DefaultMutableTreeNode(filho.getName());
-                arquivos.put(filho.getName(), filho.toString());
-                if (filho.isDirectory() && recursivo) {
-                    principal.add(no);
-                    listarArquivos(filho.getPath(), no, recursivo);
-                } else if (!filho.isDirectory()) {
-                    principal.add(no);
-                }
-            }
+		for (File filho : filhos) {
+			DefaultMutableTreeNode no = new DefaultMutableTreeNode(
+					filho.getName());
+			arquivos.put(filho.getName(), filho.toString());
+			if (filho.isDirectory() && recursivo) {
+				principal.add(no);
+				listarArquivos(filho.getPath(), no, recursivo);
+			} else if (!filho.isDirectory()) {
+				principal.add(no);
+			}
+		}
 	}
 
 	/**
-	* Acessa o conteúdo do objeto File.
-	*/
+	 * Acessa o conteúdo do objeto File.
+	 */
 	public File getArq() {
 		return this.arq;
 	}
 
 	/**
-	* Acessa o conteúdo da JTree.
-	*/
+	 * Acessa o conteúdo da JTree.
+	 */
 	public JTree getArvore() {
 		return this.arvore;
 	}

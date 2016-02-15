@@ -27,8 +27,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
-
+ */
 package com.cristian;
 
 import java.awt.BasicStroke;
@@ -55,11 +54,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 /**
- * Component to be used as tabComponent;
- * Contains a JLabel to show the text and 
- * a JButton to close the tab it belongs to 
- */ 
+ * Component to be used as tabComponent; Contains a JLabel to show the text and
+ * a JButton to close the tab it belongs to
+ */
 public class ButtonTabComponent extends JPanel {
+
     private final JTabbedPane pane;
     private List<AreaDeTexto> adts;
     private List<String> arquivosAbertos;
@@ -74,11 +73,11 @@ public class ButtonTabComponent extends JPanel {
         this.adts = adts;
         this.arquivosAbertos = arqsAbertos;
         setOpaque(false);
-        
+
         //make JLabel read titles from JTabbedPane
         JLabel label = new JLabel() {
             @Override
-			public String getText() {
+            public String getText() {
                 int i = pane.indexOfTabComponent(ButtonTabComponent.this);
                 if (i != -1) {
                     return pane.getTitleAt(i);
@@ -86,7 +85,7 @@ public class ButtonTabComponent extends JPanel {
                 return null;
             }
         };
-        
+
         add(label);
         //add more space between the label and the button
         label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
@@ -98,6 +97,7 @@ public class ButtonTabComponent extends JPanel {
     }
 
     private class TabButton extends JButton implements ActionListener {
+
         private TabButton() {
             int size = 17;
             setPreferredSize(new Dimension(size, size));
@@ -119,12 +119,12 @@ public class ButtonTabComponent extends JPanel {
         }
 
         @Override
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
             int indiceDoBotaoFechar = pane.indexOfTabComponent(ButtonTabComponent.this);
             if (indiceDoBotaoFechar != -1 && adts.size() != 1) {
                 if (adts.get(indiceDoBotaoFechar).arquivoModificado()) {
                     int r = JOptionPane.showConfirmDialog(null, "Você deseja salvar o arquivo?",
-                        "Fechar", JOptionPane.YES_NO_CANCEL_OPTION);
+                            "Fechar", JOptionPane.YES_NO_CANCEL_OPTION);
                     if (r == JOptionPane.OK_OPTION) {
                         if (adts.get(indiceDoBotaoFechar).getArquivo() == null) {
                             adts.get(indiceDoBotaoFechar).setTexto(adts.get(indiceDoBotaoFechar).getRSyntax().getText());
@@ -140,7 +140,7 @@ public class ButtonTabComponent extends JPanel {
                 if (adts.get(indiceDoBotaoFechar).getArquivo() != null && !arquivosAbertos.isEmpty()) {
                     arquivosAbertos.remove(adts.get(indiceDoBotaoFechar).getArquivo().toString());
                 }
-                
+
                 adts.remove(indiceDoBotaoFechar);
                 pane.remove(indiceDoBotaoFechar);
             }
@@ -148,12 +148,12 @@ public class ButtonTabComponent extends JPanel {
 
         //we don't want to update UI for this button
         @Override
-		public void updateUI() {
+        public void updateUI() {
         }
 
         //paint the cross
         @Override
-		protected void paintComponent(Graphics g) {
+        protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2 = (Graphics2D) g.create();
             //shift the image for pressed buttons
@@ -174,7 +174,7 @@ public class ButtonTabComponent extends JPanel {
 
     private final static MouseListener buttonMouseListener = new MouseAdapter() {
         @Override
-		public void mouseEntered(MouseEvent e) {
+        public void mouseEntered(MouseEvent e) {
             Component component = e.getComponent();
             if (component instanceof AbstractButton) {
                 AbstractButton button = (AbstractButton) component;
@@ -183,7 +183,7 @@ public class ButtonTabComponent extends JPanel {
         }
 
         @Override
-		public void mouseExited(MouseEvent e) {
+        public void mouseExited(MouseEvent e) {
             Component component = e.getComponent();
             if (component instanceof AbstractButton) {
                 AbstractButton button = (AbstractButton) component;

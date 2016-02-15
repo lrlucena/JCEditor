@@ -14,70 +14,71 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 /**
-* Classe que exibe as propriedades do SO do usuário
-* @author    Cristian Henrique (cristianmsbr@gmail.com)
-* @version   1.9
-* @since     Segunda atualização
-*/
+ * Classe que exibe as propriedades do SO do usuário
+ *
+ * @author Cristian Henrique (cristianmsbr@gmail.com)
+ * @version 1.9
+ * @since Segunda atualização
+ */
 public class PropriedadesSistema extends JDialog {
-	private Locale loc = Locale.getDefault();
-	private JTable tabela;
-	private JLabel label;
 
-	/**
-	* O construtor se encarrega de exibir todo o diálogo
-	* O método getProperty(), da classe System foi utilizado para obter as informações do sistema
-	*/
-	public PropriedadesSistema() {
-            super();
-		setTitle("Sobre este Computador");
-		
-		tabela = new JTable();
-		tabela.setEnabled(false);
-		tabela.setShowHorizontalLines(false);
-		tabela.setShowVerticalLines(false);
-		tabela.setBackground(new Color(238, 238, 238));
+    private Locale loc = Locale.getDefault();
+    private JTable tabela;
+    private JLabel label;
 
-		label = new JLabel("Informações");
-		label.setFont(new Font("Roboto Light", Font.PLAIN, 28));
+    /**
+     * O construtor se encarrega de exibir todo o diálogo O método
+     * getProperty(), da classe System foi utilizado para obter as informações
+     * do sistema
+     */
+    public PropriedadesSistema() {
+        super();
+        setTitle("Sobre este Computador");
 
-		tabela.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Sistema Operacional", System.getProperty("os.name") + " " + System.getProperty("os.version")},
-				{"Arquitetura", System.getProperty("os.arch")},
-				{"Usuário", System.getProperty("user.name")},
-				{"Idioma", loc.getDisplayLanguage()},
-				{"Versão do Java", System.getProperty("java.version")},
-				{"Pasta de instalação do Java", System.getProperty("java.home")},
-				{"Class Path", System.getProperty("java.class.path")},
+        tabela = new JTable();
+        tabela.setEnabled(false);
+        tabela.setShowHorizontalLines(false);
+        tabela.setShowVerticalLines(false);
+        tabela.setBackground(new Color(238, 238, 238));
 
-			},
-			new String[] {null, null}
-			));
+        label = new JLabel("Informações");
+        label.setFont(new Font("Roboto Light", Font.PLAIN, 28));
 
-		tabela.setBorder(BorderFactory.createTitledBorder(
-			null, null,
-			TitledBorder.DEFAULT_JUSTIFICATION,
-			TitledBorder.DEFAULT_POSITION,
-			new Font("Roboto Light", 1, 14)
-			));
+        tabela.setModel(new DefaultTableModel(
+                new Object[][]{
+                    {"Sistema Operacional", System.getProperty("os.name") + " " + System.getProperty("os.version")},
+                    {"Arquitetura", System.getProperty("os.arch")},
+                    {"Usuário", System.getProperty("user.name")},
+                    {"Idioma", loc.getDisplayLanguage()},
+                    {"Versão do Java", System.getProperty("java.version")},
+                    {"Pasta de instalação do Java", System.getProperty("java.home")},
+                    {"Class Path", System.getProperty("java.class.path")},},
+                new String[]{null, null}
+        ));
 
-		this.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent ev) {
-				if (ev.getKeyCode() == KeyEvent.VK_ESCAPE) {
-					PropriedadesSistema.this.dispose();
-				}
-			}
-		});
+        tabela.setBorder(BorderFactory.createTitledBorder(
+                null, null,
+                TitledBorder.DEFAULT_JUSTIFICATION,
+                TitledBorder.DEFAULT_POSITION,
+                new Font("Roboto Light", 1, 14)
+        ));
 
-		this.getContentPane().add(BorderLayout.NORTH, label);
-		this.getContentPane().add(BorderLayout.CENTER, tabela);
-		this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-		this.setResizable(false);
-		this.setSize(397, 175);//145
-		this.setLocationRelativeTo(null);
-		this.setModal(true);
-		this.setVisible(true);
-	}
+        this.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent ev) {
+                if (ev.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    PropriedadesSistema.this.dispose();
+                }
+            }
+        });
+
+        this.getContentPane().add(BorderLayout.NORTH, label);
+        this.getContentPane().add(BorderLayout.CENTER, tabela);
+        this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        this.setResizable(false);
+        this.setSize(397, 175);//145
+        this.setLocationRelativeTo(null);
+        this.setModal(true);
+        this.setVisible(true);
+    }
 }
